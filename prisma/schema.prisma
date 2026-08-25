@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  RECEPTIONIST
+  GUEST
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CHECKED_IN
+  CHECKED_OUT
+  CANCELLED
+}
+
+model User {
+  id        String     @id @default(cuid())
+  name      String
+  email     String     @unique
+  password  String
+  role      UserRole   @default(GUEST)
+  status    UserStatus @default(ACTIVE)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  bookings  Booking[]
+
+  @@map("users")
+}
+
+model Hotel {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  address     String
+  city        String
+  country     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  rooms       Room[]
+
+  @@map("hotels")
+}
+
+model Room {
+  id          String     @id @default(cuid())
+  hotelId     String
+  roomNumber  String
+  type        String
+  price       Decimal
+  capacity    Int
+  status      RoomStatus @default(AVAILABLE)
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  hotel       Hotel      @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  bookings    Booking[]
+
+  @@unique([hotelId, roomNumber])
+  @@map("rooms")
+}
+
+model Booking {
+  id         String        @id @default(cuid())
+  userId     String
+  roomId     String
+  checkIn    DateTime
+  checkOut   DateTime
+  guests     Int
+  totalPrice Decimal
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  user       User          @relation(fields: [userId], references: [id])
+  room       Room          @relation(fields: [roomId], references: [id])
+
+  @@map("bookings")
+}
