@@ -12,7 +12,7 @@ export default function HeroSection() {
     >
       <div className='absolute inset-0'>
         <img
-          src='https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2200&q=85'
+          src='/header.avif'
           alt='Luxury hotel'
           className='h-full w-full object-cover'
         />

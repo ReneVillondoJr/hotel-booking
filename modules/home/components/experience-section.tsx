@@ -1,6 +1,6 @@
-import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 
 export default function ExperienceSection() {
   return (
@@ -28,10 +28,13 @@ export default function ExperienceSection() {
               around simple moments that make a stay memorable.
             </p>
 
-            <Button variant='outline' className='mt-8 rounded-full px-6'>
+            <Link
+              href='/guest/experience'
+              className='mt-8 inline-flex h-10 items-center justify-center gap-2 rounded-full border border-input bg-background px-6 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground'
+            >
               Discover the experience
-              <ArrowRight />
-            </Button>
+              <ArrowRight className='h-4 w-4' />
+            </Link>
           </div>
         </div>
       </div>
