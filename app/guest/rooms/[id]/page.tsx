@@ -1,17 +1,23 @@
-interface Props {
+import { notFound } from 'next/navigation';
+
+import { RoomDetail } from '@/modules/room';
+
+import { rooms } from '@/modules/room/data/room';
+
+interface PageProps {
   params: Promise<{
     id: string;
   }>;
 }
 
-export default async function RoomDetailsPage({ params }: Props) {
+export default async function Page({ params }: PageProps) {
   const { id } = await params;
 
-  return (
-    <main className='p-6'>
-      <h1 className='text-2xl font-semibold'>Room Details</h1>
+  const room = rooms.find((item) => item.id === id);
 
-      <p className='mt-2 text-muted-foreground'>Room ID: {id}</p>
-    </main>
-  );
+  if (!room) {
+    notFound();
+  }
+
+  return <RoomDetail room={room} />;
 }

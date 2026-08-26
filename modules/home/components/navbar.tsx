@@ -37,9 +37,9 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Desktop Booking Button */}
+        {/* Desktop Booking */}
         <Link
-          href='#booking'
+          href='/guest/booking'
           className='hidden h-10 items-center justify-center rounded-full bg-white px-6 text-sm font-medium text-stone-900 transition hover:bg-white/90 md:inline-flex'
         >
           Book Your Stay
@@ -49,6 +49,7 @@ export default function Navbar() {
         <Sheet>
           <SheetTrigger className='inline-flex size-10 items-center justify-center rounded-md text-white transition hover:bg-white/10 hover:text-white md:hidden'>
             <Menu className='size-5' />
+            <span className='sr-only'>Open menu</span>
           </SheetTrigger>
 
           <SheetContent>
@@ -64,7 +65,7 @@ export default function Navbar() {
               ))}
 
               <Link
-                href='#booking'
+                href='/guest/booking'
                 className='mt-2 inline-flex h-10 items-center justify-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition hover:bg-primary/90'
               >
                 Book Your Stay

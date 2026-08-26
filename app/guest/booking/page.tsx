@@ -1,7 +1,5 @@
-export default function GuestBookingPage() {
-  return (
-    <main className='p-6'>
-      <h1 className='text-2xl font-semibold'>Book a Room</h1>
-    </main>
-  );
+import { BookingPage } from '@/modules/booking';
+
+export default function Page() {
+  return <BookingPage />;
 }

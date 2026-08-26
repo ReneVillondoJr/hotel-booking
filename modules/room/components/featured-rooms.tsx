@@ -1,7 +1,8 @@
 import Link from 'next/link';
+
 import { ArrowUpRight } from 'lucide-react';
 
-import { rooms } from '@/modules/room/data/room';
+import { rooms } from '../data/room';
 
 import RoomCard from './room-card';
 
