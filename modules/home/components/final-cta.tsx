@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react';
-
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
 export default function FinalCta() {
@@ -15,10 +15,14 @@ export default function FinalCta() {
         <p className='mx-auto mt-6 max-w-xl text-base leading-7 text-muted-foreground'>
           Find your room, choose your dates, and let us take care of the rest.
         </p>
-
-        <Button size='lg' className='mt-8 rounded-full px-8'>
-          Book Your Stay
-          <ArrowRight />
+        <Button>
+          <Link
+            href='/guest/booking'
+            className='flex items-center gap-2 rounded-full px-4 py-3'
+          >
+            <span>Book Your Stay</span>
+            <ArrowRight className='size-4' />
+          </Link>
         </Button>
       </div>
     </section>

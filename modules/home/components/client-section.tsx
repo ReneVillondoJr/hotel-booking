@@ -3,12 +3,13 @@ import { ArrowRight, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import BookingSearch from './booking-search';
+import Link from 'next/link';
 
 export default function HeroSection() {
   return (
     <section
       id='booking'
-      className='relative min-h-[760px] overflow-hidden bg-stone-900'
+      className='relative min-h-[780px] overflow-hidden bg-stone-900'
     >
       <div className='absolute inset-0'>
         <img
@@ -17,31 +18,35 @@ export default function HeroSection() {
           className='h-full w-full object-cover'
         />
 
-        <div className='absolute inset-0 bg-black/45' />
-        <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30' />
+        <div className='absolute inset-0 bg-black/40' />
+        <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30' />
       </div>
 
-      <div className='relative mx-auto flex min-h-[760px] max-w-7xl flex-col justify-center px-5 pb-36 pt-28 lg:px-8'>
+      <div className='relative flex min-h-[780px] items-center justify-center px-5 pb-32 pt-28 text-center'>
         <div className='max-w-3xl text-white'>
-          <div className='mb-5 flex items-center gap-2 text-sm font-medium text-white/80'>
+          <div className='mb-6 flex items-center justify-center gap-2 text-sm text-white/75'>
             <MapPin className='size-4' />A quiet place to stay
           </div>
 
-          <h1 className='max-w-3xl text-5xl font-semibold tracking-[-0.04em] sm:text-6xl lg:text-8xl'>
-            Stay somewhere worth remembering.
+          <h1 className='text-5xl font-medium tracking-[-0.04em] sm:text-6xl lg:text-8xl'>
+            Stay somewhere
+            <br />
+            worth remembering.
           </h1>
 
-          <p className='mt-6 max-w-xl text-base leading-7 text-white/80 sm:text-lg'>
+          <p className='mx-auto mt-6 max-w-xl text-base leading-7 text-white/75 sm:text-lg'>
             Thoughtfully designed rooms, warm hospitality, and everything you
             need for a comfortable and memorable stay.
           </p>
 
           <Button
             size='lg'
-            className='mt-8 rounded-full bg-primary px-7 text-white hover:bg-primary/90'
+            className='mt-8 rounded-full bg-white px-8 text-stone-900 hover:bg-white/90'
           >
-            Explore Rooms
-            <ArrowRight />
+            <Link href='/guest/rooms' className='flex items-center gap-2'>
+              <span>Explore Rooms</span>
+              <ArrowRight className='size-4' />
+            </Link>
           </Button>
         </div>
       </div>

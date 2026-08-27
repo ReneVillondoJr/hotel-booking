@@ -4,8 +4,8 @@ import ExperienceSection from '@/modules/home/components/experience-section';
 import AmenitiesSection from '@/modules/home/components/amenities-section';
 import TestimonialsSection from '@/modules/home/components/testimonials-section';
 import FinalCta from '@/modules/home/components/final-cta';
-import Navbar from '@/components/navbar';
-import Footer from '@/components/footer';
+import Navbar from '@/components/home/navbar';
+import Footer from '@/components/home/footer';
 
 export default function HomePage() {
   return (
