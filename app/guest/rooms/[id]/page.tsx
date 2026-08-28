@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
 
-import { RoomDetail } from '@/modules/room';
+import { RoomDetail } from '@/modules/homepage/room';
 
-import { rooms } from '@/modules/room/data/room';
+import { rooms } from '@/modules/homepage/room/data/room';
 
 interface PageProps {
   params: Promise<{

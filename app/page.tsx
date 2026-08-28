@@ -1,5 +1,5 @@
-import HomePage from '@/modules/home/';
+import { redirect } from 'next/navigation';
 
-export default function Home() {
-  return <HomePage />;
+export default async function HomePage() {
+  redirect('/guest');
 }
