@@ -1,5 +1,5 @@
-import BookingPage from '@/modules/admin/modules/booking/page';
+import { redirect } from 'next/navigation';
 
-export default function Page() {
-  return <BookingPage />;
+export default function AdminPage() {
+  redirect('/admin/dashboard');
 }

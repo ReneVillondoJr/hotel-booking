@@ -1,4 +1,4 @@
-import { ExperiencePage } from '@/modules/experience';
+import { ExperiencePage } from '@/modules/homepage/experience';
 
 export default function Page() {
   return <ExperiencePage />;

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
-import ExperienceDetail from '@/modules/experience/components/experience-detail';
-import { experiences } from '@/modules/experience/data/experience';
+import ExperienceDetail from '@/modules/homepage/experience/components/experience-detail';
+import { experiences } from '@/modules/homepage/experience/data/experience';
 
 interface ExperiencePageProps {
   params: Promise<{
