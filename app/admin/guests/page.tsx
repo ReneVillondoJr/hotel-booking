@@ -1,7 +1,5 @@
-export default function AdminGuestPage() {
-  return (
-    <main className='p-6'>
-      <h1 className='text-2xl font-semibold'>Guests</h1>
-    </main>
-  );
+import GuestsPage from '@/modules/admin/guests';
+
+export default function Page() {
+  return <GuestsPage />;
 }
