@@ -52,3 +52,27 @@ export interface Booking {
   createdAt: string;
   updatedAt: string;
 }
+export interface NewBookingFormData {
+  guestName: string;
+  email: string;
+  phone: string;
+
+  roomId: string;
+
+  checkIn: string;
+  checkOut: string;
+
+  adults: string;
+  children: string;
+
+  bookingStatus: string;
+  paymentStatus: string;
+
+  specialRequests: string;
+}
+
+export interface RoomOption {
+  id: string;
+  name: string;
+  price: number;
+}

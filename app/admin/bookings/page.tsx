@@ -1,4 +1,4 @@
-import BookingPage from '@/modules/admin/booking/page';
+import BookingPage from '@/modules/admin/booking';
 
 export default function Page() {
   return <BookingPage />;

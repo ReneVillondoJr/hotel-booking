@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 
-import type { PaymentStatus } from '../types/booking';
+import type { PaymentStatus } from '@/modules/admin/booking/types/booking';
 
 interface BookingPaymentBadgeProps {
   status: PaymentStatus;
@@ -15,22 +15,22 @@ const config: Record<
 > = {
   UNPAID: {
     label: 'Unpaid',
-    className: 'bg-red-50 text-red-700',
+    className: 'border-red-200 bg-red-50 text-red-700',
   },
 
   PARTIAL: {
     label: 'Partial',
-    className: 'bg-yellow-50 text-yellow-700',
+    className: 'border-amber-200 bg-amber-50 text-amber-700',
   },
 
   PAID: {
     label: 'Paid',
-    className: 'bg-green-50 text-green-700',
+    className: 'border-emerald-200 bg-emerald-50 text-emerald-700',
   },
 
   REFUNDED: {
     label: 'Refunded',
-    className: 'bg-gray-100 text-gray-700',
+    className: 'border-slate-200 bg-slate-50 text-slate-700',
   },
 };
 
@@ -38,7 +38,7 @@ export function BookingPaymentBadge({ status }: BookingPaymentBadgeProps) {
   const item = config[status];
 
   return (
-    <Badge variant='secondary' className={item.className}>
+    <Badge variant='outline' className={item.className}>
       {item.label}
     </Badge>
   );

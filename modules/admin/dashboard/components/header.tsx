@@ -1,6 +1,5 @@
-import { CalendarPlus, Download } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
+import { ExportButton } from '../../../../components/export-button';
+import { NewBookingButton } from '../../../../components/booking-button';
 
 export default function DashboardHeader() {
   return (
@@ -18,15 +17,8 @@ export default function DashboardHeader() {
       </div>
 
       <div className='flex flex-wrap gap-2'>
-        <Button variant='outline'>
-          <Download className='size-4' />
-          Export
-        </Button>
-
-        <Button>
-          <CalendarPlus className='size-4' />
-          New Booking
-        </Button>
+        <ExportButton />
+        <NewBookingButton />
       </div>
     </div>
   );

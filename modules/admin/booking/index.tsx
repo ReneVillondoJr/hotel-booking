@@ -3,7 +3,7 @@
 import BookingHeader from './components/booking-header';
 import { BookingSummary } from '@/modules/admin/booking/components/booking-summer';
 import { BookingFilters } from '@/modules/admin/booking/components/booking-filters';
-import { BookingTable } from './components/booking-table';
+import BookingTable from './components/booking-table';
 
 import { useBookings } from './hooks/use-booking';
 import { useBookingFilters } from './hooks/use-booking-filter';

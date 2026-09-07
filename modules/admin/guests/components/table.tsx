@@ -102,7 +102,13 @@ export default function GuestTable({ guests }: GuestTableProps) {
                 </TableCell>
 
                 <TableCell className='text-right'>
-                  <GuestActions guestId={guest.id} />
+                  <GuestActions
+                    guestId={guest.id}
+                    guestName={`${guest.firstName} ${guest.lastName}`}
+                    email={guest.email}
+                    phone={guest.phone}
+                    status={guest.status}
+                  />
                 </TableCell>
               </TableRow>
             ))}
