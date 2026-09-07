@@ -10,7 +10,8 @@ import { useBookingFilters } from './hooks/use-booking-filter';
 import { useBookingPagination } from './hooks/use-booking-pagination';
 
 export default function BookingPage() {
-  const { bookings, loading, refetch } = useBookings();
+  const { bookings, loading, refetch, updateBooking, deleteBooking } =
+    useBookings();
 
   const { filters, filteredBookings, updateFilter, clearFilters } =
     useBookingFilters(bookings);
@@ -37,6 +38,8 @@ export default function BookingPage() {
         pageCount={pageCount}
         onPageChange={changePage}
         onRefresh={refetch}
+        onSave={updateBooking}
+        onDelete={deleteBooking}
       />
     </div>
   );

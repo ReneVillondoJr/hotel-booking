@@ -1,6 +1,6 @@
 'use client';
 
-import { CalendarDays, Mail, Phone, Users } from 'lucide-react';
+import { CalendarDays, CreditCard, Mail, Phone, User } from 'lucide-react';
 
 import {
   Dialog,
@@ -10,16 +10,16 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-import { Separator } from '@/components/ui/separator';
-
 import { BookingPaymentBadge } from './booking-payment';
 import { BookingStatusBadge } from './booking-status-badge';
 
 import type { Booking } from '../types/booking';
 
 interface BookingViewDialogProps {
-  booking: Booking | null;
+  booking: Booking;
+
   open: boolean;
+
   onOpenChange: (open: boolean) => void;
 }
 
@@ -44,185 +44,194 @@ export function BookingViewDialog({
   open,
   onOpenChange,
 }: BookingViewDialogProps) {
-  if (!booking) return null;
-
   const guestName = `${booking.guest.firstName} ${booking.guest.lastName}`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-h-[90vh] overflow-y-auto sm:max-w-2xl'>
+      <DialogContent
+        className='
+          max-h-[90vh]
+          overflow-y-auto
+          sm:max-w-2xl
+        '
+      >
         <DialogHeader>
-          <DialogTitle className='flex items-center gap-2'>
-            Booking {booking.bookingNumber}
-            <BookingStatusBadge status={booking.status} />
-          </DialogTitle>
+          <DialogTitle>Booking Details</DialogTitle>
 
-          <DialogDescription>
-            View booking and guest information.
-          </DialogDescription>
+          <DialogDescription>{booking.bookingNumber}</DialogDescription>
         </DialogHeader>
 
         <div className='space-y-6'>
+          {/* Header */}
+
+          <div className='flex flex-col gap-3 rounded-lg border bg-muted/30 p-4 sm:flex-row sm:items-center sm:justify-between'>
+            <div>
+              <p className='text-xs text-muted-foreground'>Booking Number</p>
+
+              <p className='font-semibold'>{booking.bookingNumber}</p>
+            </div>
+
+            <div className='flex flex-wrap gap-2'>
+              <BookingStatusBadge status={booking.status} />
+
+              <BookingPaymentBadge status={booking.paymentStatus} />
+            </div>
+          </div>
+
           {/* Guest */}
+
           <section className='space-y-3'>
             <h3 className='text-sm font-semibold'>Guest Information</h3>
 
-            <div className='grid gap-4 sm:grid-cols-2'>
-              <div>
-                <p className='text-xs text-muted-foreground'>Guest</p>
-                <p className='mt-1 font-medium'>{guestName}</p>
-              </div>
+            <div className='grid gap-3 sm:grid-cols-2'>
+              <div className='flex items-center gap-3 rounded-lg border p-3'>
+                <User className='size-4 text-muted-foreground' />
 
-              <div>
-                <p className='text-xs text-muted-foreground'>Email</p>
-                <div className='mt-1 flex items-center gap-2'>
-                  <Mail className='size-4 text-muted-foreground' />
-                  <span className='text-sm'>{booking.guest.email}</span>
+                <div className='min-w-0'>
+                  <p className='text-xs text-muted-foreground'>Guest</p>
+
+                  <p className='truncate text-sm font-medium'>{guestName}</p>
                 </div>
               </div>
 
-              {booking.guest.contactNumber && (
+              <div className='flex items-center gap-3 rounded-lg border p-3'>
+                <Mail className='size-4 text-muted-foreground' />
+
+                <div className='min-w-0'>
+                  <p className='text-xs text-muted-foreground'>Email</p>
+
+                  <p className='truncate text-sm font-medium'>
+                    {booking.guest.email}
+                  </p>
+                </div>
+              </div>
+
+              <div className='flex items-center gap-3 rounded-lg border p-3'>
+                <Phone className='size-4 text-muted-foreground' />
+
                 <div>
                   <p className='text-xs text-muted-foreground'>
                     Contact Number
                   </p>
-                  <div className='mt-1 flex items-center gap-2'>
-                    <Phone className='size-4 text-muted-foreground' />
-                    <span className='text-sm'>
-                      {booking.guest.contactNumber}
-                    </span>
-                  </div>
+
+                  <p className='text-sm font-medium'>
+                    {booking.guest.contactNumber || 'Not provided'}
+                  </p>
                 </div>
-              )}
+              </div>
             </div>
           </section>
 
-          <Separator />
+          {/* Room */}
 
-          {/* Stay */}
           <section className='space-y-3'>
             <h3 className='text-sm font-semibold'>Stay Information</h3>
 
-            <div className='grid gap-4 sm:grid-cols-2'>
-              <div>
-                <p className='text-xs text-muted-foreground'>Room</p>
-                <p className='mt-1 font-medium'>{booking.room.name}</p>
-                <p className='text-xs text-muted-foreground'>
-                  {booking.room.type}
-                </p>
-              </div>
+            <div className='rounded-lg border'>
+              <div className='grid gap-4 p-4 sm:grid-cols-2'>
+                <div>
+                  <p className='text-xs text-muted-foreground'>Room</p>
 
-              <div>
-                <p className='text-xs text-muted-foreground'>Guests</p>
-                <div className='mt-1 flex items-center gap-2'>
-                  <Users className='size-4 text-muted-foreground' />
-                  <span className='text-sm'>
-                    {booking.guests} {booking.guests === 1 ? 'guest' : 'guests'}
-                  </span>
+                  <p className='text-sm font-medium'>{booking.room.name}</p>
                 </div>
-              </div>
 
-              <div>
-                <p className='text-xs text-muted-foreground'>Check-in</p>
-                <div className='mt-1 flex items-center gap-2'>
-                  <CalendarDays className='size-4 text-muted-foreground' />
-                  <span className='text-sm'>{formatDate(booking.checkIn)}</span>
+                <div>
+                  <p className='text-xs text-muted-foreground'>Room Type</p>
+
+                  <p className='text-sm font-medium'>{booking.room.type}</p>
                 </div>
-              </div>
 
-              <div>
-                <p className='text-xs text-muted-foreground'>Check-out</p>
-                <div className='mt-1 flex items-center gap-2'>
-                  <CalendarDays className='size-4 text-muted-foreground' />
-                  <span className='text-sm'>
+                <div>
+                  <p className='text-xs text-muted-foreground'>Check-in</p>
+
+                  <p className='flex items-center gap-2 text-sm font-medium'>
+                    <CalendarDays className='size-4 text-muted-foreground' />
+
+                    {formatDate(booking.checkIn)}
+                  </p>
+                </div>
+
+                <div>
+                  <p className='text-xs text-muted-foreground'>Check-out</p>
+
+                  <p className='flex items-center gap-2 text-sm font-medium'>
+                    <CalendarDays className='size-4 text-muted-foreground' />
+
                     {formatDate(booking.checkOut)}
-                  </span>
+                  </p>
                 </div>
-              </div>
 
-              <div>
-                <p className='text-xs text-muted-foreground'>Nights</p>
-                <p className='mt-1 text-sm'>
-                  {booking.nights} {booking.nights === 1 ? 'night' : 'nights'}
-                </p>
-              </div>
+                <div>
+                  <p className='text-xs text-muted-foreground'>Nights</p>
 
-              <div>
-                <p className='text-xs text-muted-foreground'>Booking Source</p>
-                <p className='mt-1 text-sm'>{booking.source}</p>
+                  <p className='text-sm font-medium'>
+                    {booking.nights} {booking.nights === 1 ? 'night' : 'nights'}
+                  </p>
+                </div>
+
+                <div>
+                  <p className='text-xs text-muted-foreground'>Guests</p>
+
+                  <p className='text-sm font-medium'>
+                    {booking.guests} {booking.guests === 1 ? 'guest' : 'guests'}
+                  </p>
+                </div>
               </div>
             </div>
           </section>
-
-          <Separator />
 
           {/* Payment */}
+
           <section className='space-y-3'>
-            <div className='flex items-center justify-between'>
-              <h3 className='text-sm font-semibold'>Payment Summary</h3>
+            <h3 className='text-sm font-semibold'>Payment Summary</h3>
 
-              <BookingPaymentBadge status={booking.paymentStatus} />
-            </div>
+            <div className='rounded-lg border'>
+              <div className='space-y-3 p-4'>
+                <div className='flex justify-between gap-4 text-sm'>
+                  <span className='text-muted-foreground'>Room rate</span>
 
-            <div className='space-y-2 rounded-lg border p-4'>
-              <div className='flex justify-between text-sm'>
-                <span className='text-muted-foreground'>Room rate</span>
-                <span>{formatCurrency(booking.roomRate)}</span>
-              </div>
-
-              <div className='flex justify-between text-sm'>
-                <span className='text-muted-foreground'>Subtotal</span>
-                <span>{formatCurrency(booking.subtotal)}</span>
-              </div>
-
-              <div className='flex justify-between text-sm'>
-                <span className='text-muted-foreground'>Tax</span>
-                <span>{formatCurrency(booking.tax)}</span>
-              </div>
-
-              {booking.discount > 0 && (
-                <div className='flex justify-between text-sm'>
-                  <span className='text-muted-foreground'>Discount</span>
-                  <span>-{formatCurrency(booking.discount)}</span>
+                  <span>
+                    {formatCurrency(booking.room.price)}
+                    /night
+                  </span>
                 </div>
-              )}
 
-              <Separator />
+                <div className='flex justify-between gap-4 text-sm'>
+                  <span className='text-muted-foreground'>Subtotal</span>
 
-              <div className='flex justify-between'>
-                <span className='font-semibold'>Total</span>
-                <span className='text-lg font-semibold'>
-                  {formatCurrency(booking.total)}
-                </span>
+                  <span>{formatCurrency(booking.subtotal)}</span>
+                </div>
+
+                {booking.discount > 0 && (
+                  <div className='flex justify-between gap-4 text-sm'>
+                    <span className='text-muted-foreground'>Discount</span>
+
+                    <span>-{formatCurrency(booking.discount)}</span>
+                  </div>
+                )}
+
+                <div className='border-t pt-3'>
+                  <div className='flex items-center justify-between gap-4'>
+                    <div className='flex items-center gap-2'>
+                      <CreditCard className='size-4 text-muted-foreground' />
+
+                      <span className='font-semibold'>Total</span>
+                    </div>
+
+                    <span className='text-lg font-bold'>
+                      {formatCurrency(booking.total)}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
-          {/* Special request */}
-          {booking.specialRequests && (
-            <>
-              <Separator />
+          {/* Created */}
 
-              <section className='space-y-2'>
-                <h3 className='text-sm font-semibold'>Special Requests</h3>
-
-                <p className='rounded-lg bg-muted/50 p-3 text-sm text-muted-foreground'>
-                  {booking.specialRequests}
-                </p>
-              </section>
-            </>
-          )}
-
-          {/* Notes */}
-          {booking.notes && (
-            <section className='space-y-2'>
-              <h3 className='text-sm font-semibold'>Notes</h3>
-
-              <p className='rounded-lg bg-muted/50 p-3 text-sm text-muted-foreground'>
-                {booking.notes}
-              </p>
-            </section>
-          )}
+          <div className='text-xs text-muted-foreground'>
+            Created {formatDate(booking.createdAt)}
+          </div>
         </div>
       </DialogContent>
     </Dialog>

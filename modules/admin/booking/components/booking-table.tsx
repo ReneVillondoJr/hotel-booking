@@ -15,21 +15,28 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
+import type { Booking } from '../types/booking';
+
 import { BookingActions } from './booking-actions';
 import { BookingPaymentBadge } from './booking-payment';
 import { BookingStatusBadge } from './booking-status-badge';
 
-import type { Booking } from '../types/booking';
-
 interface BookingTableProps {
   bookings: Booking[];
+
   loading: boolean;
+
   page: number;
+
   pageCount: number;
+
   onPageChange: (page: number) => void;
+
   onRefresh: () => void;
-  onView?: (booking: Booking) => void;
-  onEdit?: (booking: Booking) => void;
+
+  onSave?: (booking: Booking) => void;
+
+  onDelete?: (booking: Booking) => void;
 }
 
 function formatDate(date: string) {
@@ -48,6 +55,54 @@ function formatCurrency(amount: number) {
   }).format(amount);
 }
 
+function LoadingRow() {
+  return (
+    <TableRow>
+      <TableCell>
+        <div className='space-y-2'>
+          <div className='h-4 w-28 animate-pulse rounded bg-muted' />
+
+          <div className='h-3 w-20 animate-pulse rounded bg-muted' />
+        </div>
+      </TableCell>
+
+      <TableCell>
+        <div className='space-y-2'>
+          <div className='h-4 w-28 animate-pulse rounded bg-muted' />
+
+          <div className='h-3 w-36 animate-pulse rounded bg-muted' />
+        </div>
+      </TableCell>
+
+      <TableCell>
+        <div className='space-y-2'>
+          <div className='h-4 w-32 animate-pulse rounded bg-muted' />
+
+          <div className='h-3 w-20 animate-pulse rounded bg-muted' />
+        </div>
+      </TableCell>
+
+      <TableCell>
+        <div className='h-4 w-28 animate-pulse rounded bg-muted' />
+      </TableCell>
+
+      <TableCell>
+        <div className='h-6 w-20 animate-pulse rounded-full bg-muted' />
+      </TableCell>
+
+      <TableCell>
+        <div className='h-6 w-16 animate-pulse rounded-full bg-muted' />
+      </TableCell>
+
+      <TableCell>
+        <div className='ml-auto h-4 w-20 animate-pulse rounded bg-muted' />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+  );
+}
+
 export default function BookingTable({
   bookings,
   loading,
@@ -55,8 +110,8 @@ export default function BookingTable({
   pageCount,
   onPageChange,
   onRefresh,
-  onView,
-  onEdit,
+  onSave,
+  onDelete,
 }: BookingTableProps) {
   return (
     <Card className='overflow-hidden'>
@@ -97,48 +152,9 @@ export default function BookingTable({
 
             <TableBody>
               {loading ?
-                Array.from({ length: 5 }).map((_, index) => (
-                  <TableRow key={`loading-${index}`}>
-                    <TableCell>
-                      <div className='space-y-2'>
-                        <div className='h-4 w-28 animate-pulse rounded bg-muted' />
-                        <div className='h-3 w-20 animate-pulse rounded bg-muted' />
-                      </div>
-                    </TableCell>
-
-                    <TableCell>
-                      <div className='space-y-2'>
-                        <div className='h-4 w-28 animate-pulse rounded bg-muted' />
-                        <div className='h-3 w-36 animate-pulse rounded bg-muted' />
-                      </div>
-                    </TableCell>
-
-                    <TableCell>
-                      <div className='space-y-2'>
-                        <div className='h-4 w-32 animate-pulse rounded bg-muted' />
-                        <div className='h-3 w-20 animate-pulse rounded bg-muted' />
-                      </div>
-                    </TableCell>
-
-                    <TableCell>
-                      <div className='h-4 w-28 animate-pulse rounded bg-muted' />
-                    </TableCell>
-
-                    <TableCell>
-                      <div className='h-6 w-20 animate-pulse rounded-full bg-muted' />
-                    </TableCell>
-
-                    <TableCell>
-                      <div className='h-6 w-16 animate-pulse rounded-full bg-muted' />
-                    </TableCell>
-
-                    <TableCell>
-                      <div className='ml-auto h-4 w-20 animate-pulse rounded bg-muted' />
-                    </TableCell>
-
-                    <TableCell />
-                  </TableRow>
-                ))
+                Array.from({
+                  length: 5,
+                }).map((_, index) => <LoadingRow key={`loading-${index}`} />)
               : bookings.length === 0 ?
                 <TableRow>
                   <TableCell colSpan={8} className='h-32 text-center'>
@@ -161,6 +177,7 @@ export default function BookingTable({
                   return (
                     <TableRow key={booking.id} className='hover:bg-muted/40'>
                       {/* Booking */}
+
                       <TableCell>
                         <div className='space-y-1'>
                           <p className='font-medium'>{booking.bookingNumber}</p>
@@ -172,6 +189,7 @@ export default function BookingTable({
                       </TableCell>
 
                       {/* Guest */}
+
                       <TableCell>
                         <div className='space-y-1'>
                           <p className='font-medium'>{guestName}</p>
@@ -189,6 +207,7 @@ export default function BookingTable({
                       </TableCell>
 
                       {/* Room */}
+
                       <TableCell>
                         <div className='space-y-1'>
                           <p className='font-medium'>{booking.room.name}</p>
@@ -207,6 +226,7 @@ export default function BookingTable({
                       </TableCell>
 
                       {/* Stay */}
+
                       <TableCell>
                         <div className='space-y-1'>
                           <div className='flex items-center gap-1.5 text-sm'>
@@ -225,16 +245,19 @@ export default function BookingTable({
                       </TableCell>
 
                       {/* Status */}
+
                       <TableCell>
                         <BookingStatusBadge status={booking.status} />
                       </TableCell>
 
                       {/* Payment */}
+
                       <TableCell>
                         <BookingPaymentBadge status={booking.paymentStatus} />
                       </TableCell>
 
                       {/* Total */}
+
                       <TableCell className='text-right'>
                         <div className='space-y-1'>
                           <p className='font-semibold'>
@@ -250,12 +273,13 @@ export default function BookingTable({
                       </TableCell>
 
                       {/* Actions */}
+
                       <TableCell className='text-right'>
                         <BookingActions
                           booking={booking}
-                          onView={onView}
-                          onEdit={onEdit}
                           onRefresh={onRefresh}
+                          onSave={onSave}
+                          onDelete={onDelete}
                         />
                       </TableCell>
                     </TableRow>
@@ -267,6 +291,7 @@ export default function BookingTable({
         </div>
 
         {/* Pagination */}
+
         {pageCount > 1 && !loading && (
           <div className='flex items-center justify-between border-t px-4 py-3'>
             <p className='text-sm text-muted-foreground'>
