@@ -1,15 +1,25 @@
 'use client';
 
-import { MoreHorizontal } from 'lucide-react';
+import { CalendarDays } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 
-import type { Booking } from '@/modules/admin/booking/types/booking';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-import { BookingStatusBadge } from '@/modules/admin/booking/components/booking-status-badge';
-import { BookingPaymentBadge } from '@/modules/admin/booking/components/booking-payment';
-import { BookingPagination } from '@/modules/admin/booking/components/booking-pagination';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
+import { BookingActions } from './booking-actions';
+import { BookingPaymentBadge } from './booking-payment';
+import { BookingStatusBadge } from './booking-status-badge';
+
+import type { Booking } from '../types/booking';
 
 interface BookingTableProps {
   bookings: Booking[];
@@ -18,116 +28,275 @@ interface BookingTableProps {
   pageCount: number;
   onPageChange: (page: number) => void;
   onRefresh: () => void;
+  onView?: (booking: Booking) => void;
+  onEdit?: (booking: Booking) => void;
 }
 
-export function BookingTable({
+function formatDate(date: string) {
+  return new Intl.DateTimeFormat('en-PH', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date(date));
+}
+
+function formatCurrency(amount: number) {
+  return new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+export default function BookingTable({
   bookings,
   loading,
   page,
   pageCount,
   onPageChange,
+  onRefresh,
+  onView,
+  onEdit,
 }: BookingTableProps) {
   return (
     <Card className='overflow-hidden'>
-      <div className='overflow-x-auto'>
-        <table className='w-full'>
-          <thead className='border-b bg-muted/50'>
-            <tr>
-              <th className='px-6 py-4 text-left text-sm font-medium'>
-                Booking
-              </th>
+      <CardHeader className='flex flex-row items-center justify-between gap-4 border-b'>
+        <div>
+          <CardTitle className='text-base font-semibold'>Bookings</CardTitle>
 
-              <th className='px-6 py-4 text-left text-sm font-medium'>Guest</th>
+          <p className='mt-1 text-sm text-muted-foreground'>
+            Manage hotel reservations and guest stays.
+          </p>
+        </div>
+      </CardHeader>
 
-              <th className='px-6 py-4 text-left text-sm font-medium'>Room</th>
+      <CardContent className='p-0'>
+        <div className='w-full overflow-x-auto'>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className='min-w-45'>Booking</TableHead>
 
-              <th className='px-6 py-4 text-left text-sm font-medium'>Stay</th>
+                <TableHead className='min-w-35'>Guest</TableHead>
 
-              <th className='px-6 py-4 text-left text-sm font-medium'>
-                Status
-              </th>
+                <TableHead className='min-w-45'>Room</TableHead>
 
-              <th className='px-6 py-4 text-left text-sm font-medium'>
-                Payment
-              </th>
+                <TableHead>Stay</TableHead>
 
-              <th className='w-12 px-6 py-4' />
-            </tr>
-          </thead>
+                <TableHead>Status</TableHead>
 
-          <tbody className='divide-y'>
-            {loading ?
-              <tr>
-                <td
-                  colSpan={7}
-                  className='px-6 py-12 text-center text-muted-foreground'
-                >
-                  Loading bookings...
-                </td>
-              </tr>
-            : bookings.length === 0 ?
-              <tr>
-                <td
-                  colSpan={7}
-                  className='px-6 py-12 text-center text-muted-foreground'
-                >
-                  No bookings found.
-                </td>
-              </tr>
-            : bookings.map((booking) => (
-                <tr key={booking.id}>
-                  <td className='px-6 py-4 font-medium'>
-                    {booking.bookingNumber}
-                  </td>
+                <TableHead>Payment</TableHead>
 
-                  <td className='px-6 py-4'>
-                    <div>
-                      <p className='font-medium'>
-                        {booking.guest.firstName} {booking.guest.lastName}
-                      </p>
+                <TableHead className='text-right'>Total</TableHead>
 
-                      <p className='text-sm text-muted-foreground'>
-                        {booking.guest.email}
-                      </p>
+                <TableHead className='w-12 text-right'>
+                  <span className='sr-only'>Actions</span>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {loading ?
+                Array.from({ length: 5 }).map((_, index) => (
+                  <TableRow key={`loading-${index}`}>
+                    <TableCell>
+                      <div className='space-y-2'>
+                        <div className='h-4 w-28 animate-pulse rounded bg-muted' />
+                        <div className='h-3 w-20 animate-pulse rounded bg-muted' />
+                      </div>
+                    </TableCell>
+
+                    <TableCell>
+                      <div className='space-y-2'>
+                        <div className='h-4 w-28 animate-pulse rounded bg-muted' />
+                        <div className='h-3 w-36 animate-pulse rounded bg-muted' />
+                      </div>
+                    </TableCell>
+
+                    <TableCell>
+                      <div className='space-y-2'>
+                        <div className='h-4 w-32 animate-pulse rounded bg-muted' />
+                        <div className='h-3 w-20 animate-pulse rounded bg-muted' />
+                      </div>
+                    </TableCell>
+
+                    <TableCell>
+                      <div className='h-4 w-28 animate-pulse rounded bg-muted' />
+                    </TableCell>
+
+                    <TableCell>
+                      <div className='h-6 w-20 animate-pulse rounded-full bg-muted' />
+                    </TableCell>
+
+                    <TableCell>
+                      <div className='h-6 w-16 animate-pulse rounded-full bg-muted' />
+                    </TableCell>
+
+                    <TableCell>
+                      <div className='ml-auto h-4 w-20 animate-pulse rounded bg-muted' />
+                    </TableCell>
+
+                    <TableCell />
+                  </TableRow>
+                ))
+              : bookings.length === 0 ?
+                <TableRow>
+                  <TableCell colSpan={8} className='h-32 text-center'>
+                    <div className='flex flex-col items-center justify-center gap-2'>
+                      <CalendarDays className='size-8 text-muted-foreground' />
+
+                      <div>
+                        <p className='font-medium'>No bookings found</p>
+
+                        <p className='text-sm text-muted-foreground'>
+                          Try adjusting your filters.
+                        </p>
+                      </div>
                     </div>
-                  </td>
+                  </TableCell>
+                </TableRow>
+              : bookings.map((booking) => {
+                  const guestName = `${booking.guest.firstName} ${booking.guest.lastName}`;
 
-                  <td className='px-6 py-4'>{booking.room.name}</td>
+                  return (
+                    <TableRow key={booking.id} className='hover:bg-muted/40'>
+                      {/* Booking */}
+                      <TableCell>
+                        <div className='space-y-1'>
+                          <p className='font-medium'>{booking.bookingNumber}</p>
 
-                  <td className='px-6 py-4'>
-                    <div className='text-sm'>
-                      <p>{booking.checkIn}</p>
-                      <p className='text-muted-foreground'>
-                        {booking.nights} nights
-                      </p>
-                    </div>
-                  </td>
+                          <p className='text-xs text-muted-foreground'>
+                            {formatDate(booking.createdAt)}
+                          </p>
+                        </div>
+                      </TableCell>
 
-                  <td className='px-6 py-4'>
-                    <BookingStatusBadge status={booking.status} />
-                  </td>
+                      {/* Guest */}
+                      <TableCell>
+                        <div className='space-y-1'>
+                          <p className='font-medium'>{guestName}</p>
 
-                  <td className='px-6 py-4'>
-                    <BookingPaymentBadge status={booking.paymentStatus} />
-                  </td>
+                          <p className='max-w-44 truncate text-xs text-muted-foreground'>
+                            {booking.guest.email}
+                          </p>
 
-                  <td className='px-6 py-4'>
-                    <Button variant='ghost' size='icon'>
-                      <MoreHorizontal />
-                    </Button>
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
+                          {booking.guest.contactNumber && (
+                            <p className='text-xs text-muted-foreground'>
+                              {booking.guest.contactNumber}
+                            </p>
+                          )}
+                        </div>
+                      </TableCell>
 
-      <BookingPagination
-        page={page}
-        pageCount={pageCount}
-        onPageChange={onPageChange}
-      />
+                      {/* Room */}
+                      <TableCell>
+                        <div className='space-y-1'>
+                          <p className='font-medium'>{booking.room.name}</p>
+
+                          <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+                            <span>{booking.room.type}</span>
+
+                            <span>•</span>
+
+                            <span>
+                              {formatCurrency(booking.room.price)}
+                              /night
+                            </span>
+                          </div>
+                        </div>
+                      </TableCell>
+
+                      {/* Stay */}
+                      <TableCell>
+                        <div className='space-y-1'>
+                          <div className='flex items-center gap-1.5 text-sm'>
+                            <CalendarDays className='size-3.5 text-muted-foreground' />
+
+                            <span>{formatDate(booking.checkIn)}</span>
+                          </div>
+
+                          <p className='text-xs text-muted-foreground'>
+                            {booking.nights}{' '}
+                            {booking.nights === 1 ? 'night' : 'nights'} ·{' '}
+                            {booking.guests}{' '}
+                            {booking.guests === 1 ? 'guest' : 'guests'}
+                          </p>
+                        </div>
+                      </TableCell>
+
+                      {/* Status */}
+                      <TableCell>
+                        <BookingStatusBadge status={booking.status} />
+                      </TableCell>
+
+                      {/* Payment */}
+                      <TableCell>
+                        <BookingPaymentBadge status={booking.paymentStatus} />
+                      </TableCell>
+
+                      {/* Total */}
+                      <TableCell className='text-right'>
+                        <div className='space-y-1'>
+                          <p className='font-semibold'>
+                            {formatCurrency(booking.total)}
+                          </p>
+
+                          {booking.discount > 0 && (
+                            <p className='text-xs text-muted-foreground'>
+                              -{formatCurrency(booking.discount)} discount
+                            </p>
+                          )}
+                        </div>
+                      </TableCell>
+
+                      {/* Actions */}
+                      <TableCell className='text-right'>
+                        <BookingActions
+                          booking={booking}
+                          onView={onView}
+                          onEdit={onEdit}
+                          onRefresh={onRefresh}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              }
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Pagination */}
+        {pageCount > 1 && !loading && (
+          <div className='flex items-center justify-between border-t px-4 py-3'>
+            <p className='text-sm text-muted-foreground'>
+              Page {page} of {pageCount}
+            </p>
+
+            <div className='flex items-center gap-2'>
+              <Button
+                type='button'
+                variant='outline'
+                size='sm'
+                disabled={page <= 1}
+                onClick={() => onPageChange(page - 1)}
+              >
+                Previous
+              </Button>
+
+              <Button
+                type='button'
+                variant='outline'
+                size='sm'
+                disabled={page >= pageCount}
+                onClick={() => onPageChange(page + 1)}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        )}
+      </CardContent>
     </Card>
   );
 }

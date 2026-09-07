@@ -1,38 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
+import { bookings as localBookings } from '../data/booking';
 import type { Booking } from '../types/booking';
 
 export function useBookings() {
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [bookings] = useState<Booking[]>(() => [...localBookings]);
 
-  async function fetchBookings() {
-    try {
-      setLoading(true);
-
-      const response = await fetch('/api/bookings');
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch bookings');
-      }
-
-      const data = await response.json();
-
-      setBookings(data.items ?? []);
-    } finally {
-      setLoading(false);
-    }
+  function fetchBookings() {
+    return Promise.resolve();
   }
-
-  useEffect(() => {
-    fetchBookings();
-  }, []);
 
   return {
     bookings,
-    loading,
+    loading: false,
     refetch: fetchBookings,
   };
 }

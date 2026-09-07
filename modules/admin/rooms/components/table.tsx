@@ -114,7 +114,14 @@ export default function RoomTable({ rooms }: RoomTableProps) {
                 </TableCell>
 
                 <TableCell className='text-right'>
-                  <RoomActions roomId={room.id} />
+                  <RoomActions
+                    roomId={room.id}
+                    roomName={room.name}
+                    roomNumber={room.roomNumber}
+                    roomType={room.type}
+                    pricePerNight={room.pricePerNight}
+                    status={room.status}
+                  />
                 </TableCell>
               </TableRow>
             );

@@ -1,6 +1,4 @@
-import { CalendarPlus } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
+import { NewBookingButton } from '../../../../components/booking-button';
 
 export default function BookingHeader() {
   return (
@@ -13,10 +11,7 @@ export default function BookingHeader() {
         </p>
       </div>
 
-      <Button className='rounded-full'>
-        <CalendarPlus className='size-4' />
-        New Booking
-      </Button>
+      <NewBookingButton />
     </div>
   );
 }

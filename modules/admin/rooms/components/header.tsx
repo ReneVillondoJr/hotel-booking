@@ -16,15 +16,12 @@ export default function RoomHeader() {
         </p>
       </div>
 
-      <Button className='flex items-center justify-center gap-2'>
-        <Link
-          href='/admin/rooms/new'
-          className='flex items-center justify-center gap-2'
-        >
+      <Link href='/admin/rooms/new'>
+        <Button className='gap-2'>
           <Plus className='size-4 shrink-0' />
           <span className='whitespace-nowrap'>Add Room</span>
-        </Link>
-      </Button>
+        </Button>
+      </Link>
     </div>
   );
 }

@@ -74,3 +74,23 @@ export interface Room {
   createdAt: string;
   updatedAt: string;
 }
+export interface NewRoomFormData {
+  name: string;
+  roomNumber: string;
+  description: string;
+  type: Room['type'];
+  pricePerNight: string;
+  currency: string;
+  maxGuests: string;
+  adults: string;
+  children: string;
+  beds: string;
+  bedType: string;
+  bathrooms: string;
+  size: string;
+  status: Room['status'];
+  amenities: string[];
+  images: Room['images'];
+  isBookable: boolean;
+  isFeatured: boolean;
+}
